@@ -1,0 +1,42 @@
+ Question 2) Write a short note on Abstract Data Structure(ABT)?
+ 
+ Answer :- An ADT is a mathematical model of a data structure that specifies the 
+ type of data stored, the operations supported on them, and the types of parameters 
+ of the operations.  An ADT specifies what each operation does, but not how it does it. 
+ Typically, an ADT can be implemented using one of many different data structures. 
+ A useful first step in deciding what data structure to use in a program is to specify 
+ an ADT for the program.
+ 
+ 
+#######In general, the steps of building ADT to data structures are:
+
+Understand and clarify the nature of the target information unit.
+Identify and determine which data objects and operations to include in the models.
+Express this property somewhat formally so that it can be understood and communicate well.
+Translate this formal specification into proper language.  In C++, this becomes a .h file. 
+In Java, this is called "user interface".
+Upon finalized specification, write necessary implementation.  
+This includes storage scheme and operational detail.  Operational detail is expressed as 
+separate functions (methods).
+
+#####Data Structures: ADT and its Implementation
+
+Now let us consider two alternate data structures for the above ADT: (1) an unordered array of records and (2) an ordered array of records, ordered by IDs.  These different data structures greatly influence the implementation details and how fast and efficient the program runs.
+
+First let us look at using an unordered array.  Assume that the student records are stored in an array with no particular order.  We can use a variable n to keep track of the number of students currently in the array.
+
+ADD   : Simply take the record and store it in slot n of the array and increment n. 
+	    This takes constant amount of time since the time is independent of n.
+SEARCH: Since the array is not ordered, we have to scan through the whole array to find 
+		the requested record.  The result could be either the record is found or the record doesn't exist.  
+		The time taken to perform the search is proportional to n and the worst case scenario is n.  
+		Of course, if the record I am looking for happens to be the fist item in the array, it only takes 
+		constant time.  However, when determining the running time of an algorithm, we are often interested 
+		in worst case analysis.
+DELETE: This operation requires us to first search for the given record.  Once it is found, the 
+		algorithm can simply replace it by the last record and decrement n.  Once the record is found, it only 
+		takes a constant amount of time to delete it.  But time spent searching for the record is the same as 
+		above, proportional to n.  Therefore, in all, this operation also takes time proportional to n, in the 
+		worst case.
+
+ 
