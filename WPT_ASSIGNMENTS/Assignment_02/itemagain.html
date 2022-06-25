@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script>
+        $(() => {
+
+            console.log("My dom is working");
+
+            function showAllItemDetails() {
+                let ajaxpars = {
+                    data: {},
+                    url: "http://localhost:900/getalldetails",
+                    type: 'get',
+                    dataType: "json",
+                    success: (output) => {
+                        console.log("My server is connected!!!" + output.length);
+                        let temp = "";
+                        for (let i = 0; i < output.length; i++) {
+                            temp += "<br>" + output[i].itemno + output[i].itemname + output[i].itemprice;
+                        }
+                        $("#msg2").html(temp);
+                    },
+                    error: (error) => {
+                        console.log("Ooops my server is not connencted !!!");
+                    }
+                }
+                $.ajax(ajaxpars);
+            } showAllItemDetails();
+
+            $("#itemno").blur(() => {
+
+                let itemno = { itemno: $("#itemno").val() };
+                console.log(itemno);
+                let ajaxpars = {
+                    data: itemno,
+                    url: "http://localhost:900/getitemdetails",
+                    type: 'get',
+                    dataType: "json",
+                    success: (output) => {
+                        console.log("My server is connected " + output.status);
+
+                        if (output.status) {
+                            $("#itemname").val(output.details.itemname);
+                            $("#itemprice").val(output.details.itemprice);
+                            $("#update").prop("disabled", false);
+                            $("#del").prop("disabled", false);
+
+                            $("#msg1").html("Item found!!!");
+                        } else {
+                            $("#itemname").val("");
+                            $("#itemprice").val("");
+                            $("#update").prop("disabled", true);
+                            $("#del").prop("disabled", true);
+                            $("#add").prop("disabled", false);
+                            $("#msg1").html("Item not found!!!");
+                        }
+
+                    },
+                    error: () => {
+                        console.log("My server not is connected ");
+                    }
+                }
+
+                $.ajax(ajaxpars);
+
+            });// this is the blur event 
+
+            $("#add").click(() => {
+
+                let input = { itemno: $("#itemno").val(), itemname: $("#itemname").val(), itemprice: $("#itemprice").val() };
+
+                console.log(input);
+                let ajaxpars = {
+
+                    data: input,
+                    url: "http://localhost:900/additemdetails",
+                    type: 'get',
+                    dataType: "json",
+                    success: (output) => {
+                        console.log("Server is connected" + output);
+                        if (output) {
+                            $("#itemno").val("");
+                            $("#itemname").val("");
+                            $("#itemprice").val("");
+                            $("#add").prop("disabled", true);
+                            $("#msg1").html("Added successfully!!!");
+                        } else {
+                            $("#msg1").html("Not Added!!!");
+                        }
+                    },
+                    error: (error) => {
+                        console.log("Server is not connected" + output);
+                    }
+                }
+                $.ajax(ajaxpars);
+                showAllItemDetails();
+            });//  add event
+
+
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Item Again</h1>
+    <hr>
+    <input type="text" name="itemno" id="itemno" placeholder="Item number">
+    <span id="msg1">Message Here</span><br><br>
+    <input type="text" name="itemname" id="itemname" placeholder="Item name">
+    <br><br>
+    <input type="text" name="itemprice" id="itemprice" placeholder="Item price">
+    <br><br>
+    <button id="add" disabled>Add</button>
+    <button id="update" disabled>Update</button>
+    <button id="del" disabled>Delete</button><br><br>
+    <hr>
+    <span id="msg2">All items data is here</span>
+</body>
+
+</html>
